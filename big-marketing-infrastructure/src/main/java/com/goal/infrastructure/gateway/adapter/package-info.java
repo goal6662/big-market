@@ -1,0 +1,1 @@
+package com.goal.infrastructure.gateway.adapter;

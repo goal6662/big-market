@@ -1,0 +1,1 @@
+package com.goal.domain.xxx.service;
