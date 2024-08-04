@@ -7,6 +7,4 @@ public interface IStrategyArmory {
 
     void assembleLotteryStrategy(Long strategyId);
 
-    Integer getRandomAwardId(Long strategyId);
-
 }

@@ -3,6 +3,7 @@ package com.goal.domain.strategy.service.armory.impl;
 import com.goal.domain.strategy.model.entity.StrategyAwardEntity;
 import com.goal.domain.strategy.repository.IStrategyRepository;
 import com.goal.domain.strategy.service.armory.IStrategyArmory;
+import com.goal.domain.strategy.service.armory.IStrategyDispatch;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -14,16 +15,29 @@ import java.util.*;
 
 @Slf4j
 @Service
-public class StrategyArmoryImpl implements IStrategyArmory {
+public class StrategyArmoryDispatchImpl implements IStrategyArmory, IStrategyDispatch {
 
     @Resource
     private IStrategyRepository repository;
 
     @Override
     public void assembleLotteryStrategy(Long strategyId) {
-        // 1. 查询策略配置
+        // 查询策略配置
         List<StrategyAwardEntity> strategyAwardEntityList = repository.queryStrategyAwardList(strategyId);
+        assembleLotteryStrategy(String.valueOf(strategyId), strategyAwardEntityList);
 
+    }
+
+
+    @Override
+    public Integer getRandomAwardId(Long strategyId) {
+        // 获取随机数范围
+        int rateRange = repository.getRateRange(strategyId);
+        return repository.getStrategyAwardAssemble(strategyId, new SecureRandom().nextInt(rateRange));
+    }
+
+
+    private void assembleLotteryStrategy(String strategyId, List<StrategyAwardEntity> strategyAwardEntityList) {
         // 2. 获取最小概率值
         BigDecimal minAwardRate = strategyAwardEntityList.stream().map(StrategyAwardEntity::getAwardRate)
                 .min(BigDecimal::compareTo)
@@ -36,22 +50,7 @@ public class StrategyArmoryImpl implements IStrategyArmory {
 
         // 4. 保证最小概率的奖品占一个位置，获取总的位置数目
         // 上取整
-        BigDecimal rateRange = totalAwardRate.divide(minAwardRate, 0, RoundingMode.CEILING);
-
-        // 5. 总的位置集合
-        List<Integer> strategySearchRateTables = new ArrayList<>(rateRange.intValue());
-        for (StrategyAwardEntity strategyAward : strategyAwardEntityList) {
-
-            Integer awardId = strategyAward.getAwardId();
-            BigDecimal awardRate = strategyAward.getAwardRate();
-
-            // 计算每个奖品占用位置的数量
-            int awardRateRange = rateRange.multiply(awardRate).setScale(0, RoundingMode.CEILING).intValue();
-            for (int i = 0; i < awardRateRange; i++) {
-                strategySearchRateTables.add(awardId);
-            }
-
-        }
+        List<Integer> strategySearchRateTables = getStrategySearchRateTables(totalAwardRate, minAwardRate, strategyAwardEntityList);
 
         // 6. 打乱顺序
         Collections.shuffle(strategySearchRateTables);
@@ -65,11 +64,35 @@ public class StrategyArmoryImpl implements IStrategyArmory {
         repository.storeStrategyAwardSearchTables(strategyId, shuffledAwardSearchRateTables.size(), shuffledAwardSearchRateTables);
     }
 
-    @Override
-    public Integer getRandomAwardId(Long strategyId) {
-        // 获取随机数范围
-        int rateRange = repository.getRateRange(strategyId);
-        return repository.getStrategyAwardAssemble(strategyId, new SecureRandom().nextInt(rateRange));
+    /**
+     * 获取概率表
+     *
+     * @param totalAwardRate          总的概率和 不一定为 1
+     * @param minAwardRate            最小的概率
+     * @param strategyAwardEntityList 当前策略下的奖品集合
+     * @return 奖品对应的概率表
+     */
+    private List<Integer> getStrategySearchRateTables(BigDecimal totalAwardRate, BigDecimal minAwardRate,
+                                                      List<StrategyAwardEntity> strategyAwardEntityList) {
+
+        // 5. 获取槽的总个数
+        BigDecimal rateRange = totalAwardRate.divide(minAwardRate, 0, RoundingMode.CEILING);
+
+        // 总的位置集合
+        List<Integer> strategySearchRateTables = new ArrayList<>(rateRange.intValue());
+        for (StrategyAwardEntity strategyAward : strategyAwardEntityList) {
+
+            Integer awardId = strategyAward.getAwardId();
+            BigDecimal awardRate = strategyAward.getAwardRate();
+
+            // 计算每个奖品占用位置的数量
+            int awardRateRange = rateRange.multiply(awardRate).setScale(0, RoundingMode.CEILING).intValue();
+            for (int i = 0; i < awardRateRange; i++) {
+                strategySearchRateTables.add(awardId);
+            }
+
+        }
+        return strategySearchRateTables;
     }
 
 }

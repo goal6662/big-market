@@ -48,13 +48,13 @@ public class StrategyRepository implements IStrategyRepository {
     }
 
     @Override
-    public void storeStrategyAwardSearchTables(Long strategyId, int rateRange, Map<Integer, Integer> shuffledAwardSearchRateTables) {
-        String rateCacheKey = Constants.RedisKey.STRATEGY_RATE_RANGE_KEY + strategyId;
+    public void storeStrategyAwardSearchTables(String key, int rateRange, Map<Integer, Integer> shuffledAwardSearchRateTables) {
+        String rateCacheKey = Constants.RedisKey.STRATEGY_RATE_RANGE_KEY + key;
 
         // 存储范围值，用于后续生成随机数
         redisService.setValue(rateCacheKey, rateRange);
 
-        String rateTableCacheKey = Constants.RedisKey.STRATEGY_RATE_TABLE_KEY + strategyId;
+        String rateTableCacheKey = Constants.RedisKey.STRATEGY_RATE_TABLE_KEY + key;
         RMap<Object, Object> cacheRateTable = redisService.getMap(rateTableCacheKey);
         cacheRateTable.putAll(shuffledAwardSearchRateTables);
     }

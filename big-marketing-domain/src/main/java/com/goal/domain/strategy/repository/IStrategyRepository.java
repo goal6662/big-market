@@ -8,7 +8,7 @@ import java.util.Map;
 public interface IStrategyRepository {
     List<StrategyAwardEntity> queryStrategyAwardList(Long strategyId);
 
-    void storeStrategyAwardSearchTables(Long strategyId, int rateRange, Map<Integer, Integer> shuffledAwardSearchRateTables);
+    void storeStrategyAwardSearchTables(String key, int rateRange, Map<Integer, Integer> shuffledAwardSearchRateTables);
 
     int getRateRange(Long strategyId);
 
