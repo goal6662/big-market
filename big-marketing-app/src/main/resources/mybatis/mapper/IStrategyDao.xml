@@ -14,4 +14,11 @@
         select * from big_market.strategy
     </select>
 
+    <!-- 获取策略 -->
+    <select id="queryByStrategyId" resultType="com.goal.infrastructure.persistent.po.Strategy">
+        select strategy.strategy_id, strategy.strategy_desc, strategy.rule_models
+        from big_market.strategy
+        where strategy_id = #{strategyId}
+    </select>
+
 </mapper>

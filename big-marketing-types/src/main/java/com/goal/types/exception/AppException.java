@@ -1,5 +1,6 @@
 package com.goal.types.exception;
 
+import com.goal.types.enums.ResponseCode;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -27,6 +28,11 @@ public class AppException extends RuntimeException {
     public AppException(String code, String message) {
         this.code = code;
         this.info = message;
+    }
+
+    public AppException(ResponseCode responseCode) {
+        this.code = responseCode.getCode();
+        this.info = responseCode.getInfo();
     }
 
     public AppException(String code, String message, Throwable cause) {

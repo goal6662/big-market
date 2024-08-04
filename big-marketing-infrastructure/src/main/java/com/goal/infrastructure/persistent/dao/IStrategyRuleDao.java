@@ -10,4 +10,5 @@ public interface IStrategyRuleDao {
 
     List<StrategyRule> queryAllRecord();
 
+    StrategyRule queryStrategyRule(StrategyRule strategyRuleReq);
 }

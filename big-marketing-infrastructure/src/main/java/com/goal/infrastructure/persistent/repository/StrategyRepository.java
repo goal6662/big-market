@@ -1,9 +1,15 @@
 package com.goal.infrastructure.persistent.repository;
 
 import com.goal.domain.strategy.model.entity.StrategyAwardEntity;
+import com.goal.domain.strategy.model.entity.StrategyEntity;
+import com.goal.domain.strategy.model.entity.StrategyRuleEntity;
 import com.goal.domain.strategy.repository.IStrategyRepository;
 import com.goal.infrastructure.persistent.dao.IStrategyAwardDao;
+import com.goal.infrastructure.persistent.dao.IStrategyDao;
+import com.goal.infrastructure.persistent.dao.IStrategyRuleDao;
+import com.goal.infrastructure.persistent.po.Strategy;
 import com.goal.infrastructure.persistent.po.StrategyAward;
+import com.goal.infrastructure.persistent.po.StrategyRule;
 import com.goal.infrastructure.persistent.redis.IRedisService;
 import com.goal.types.common.Constants;
 import lombok.AllArgsConstructor;
@@ -19,7 +25,11 @@ import java.util.Map;
 @AllArgsConstructor
 public class StrategyRepository implements IStrategyRepository {
 
+    private IStrategyDao strategyDao;
+
     private IStrategyAwardDao strategyAwardDao;
+
+    private IStrategyRuleDao strategyRuleDao;
 
     private IRedisService redisService;
 
@@ -67,6 +77,52 @@ public class StrategyRepository implements IStrategyRepository {
     @Override
     public Integer getStrategyAwardAssemble(Long strategyId, int rateIndex) {
         return redisService.getFromMap(Constants.RedisKey.STRATEGY_RATE_TABLE_KEY + strategyId, rateIndex);
+    }
+
+    @Override
+    public Integer getStrategyAwardAssemble(String key, int rateIndex) {
+        return redisService.getFromMap(Constants.RedisKey.STRATEGY_RATE_TABLE_KEY + key, rateIndex);
+    }
+
+    @Override
+    public StrategyEntity queryStrategyEntityByStrategyId(Long strategyId) {
+
+        String cacheKey = Constants.RedisKey.STRATEGY_KEY + strategyId;
+        StrategyEntity strategyEntity = redisService.getValue(cacheKey);
+        if (strategyEntity != null) {
+            return strategyEntity;
+        }
+
+        Strategy strategy = strategyDao.queryByStrategyId(strategyId);
+
+        strategyEntity = new StrategyEntity();
+        BeanUtils.copyProperties(strategy, strategyEntity);
+
+        return strategyEntity;
+    }
+
+    @Override
+    public StrategyRuleEntity queryStrategyRule(Long strategyId, String ruleModel) {
+
+        // 优先从缓存中获取
+        String cacheKey = Constants.RedisKey.STRATEGY_KEY + strategyId;
+        StrategyRuleEntity strategyRuleEntity = redisService.getValue(cacheKey);
+        if (strategyRuleEntity != null) {
+            return strategyRuleEntity;
+        }
+
+        // 查询参数
+        StrategyRule strategyRuleReq = new StrategyRule();
+        strategyRuleReq.setRuleModel(ruleModel);
+        strategyRuleReq.setStrategyId(strategyId);
+
+        strategyRuleReq = strategyRuleDao.queryStrategyRule(strategyRuleReq);
+
+        // 拷贝属性
+        strategyRuleEntity = new StrategyRuleEntity();
+        BeanUtils.copyProperties(strategyRuleReq, strategyRuleEntity);
+
+        return strategyRuleEntity;
     }
 
 }

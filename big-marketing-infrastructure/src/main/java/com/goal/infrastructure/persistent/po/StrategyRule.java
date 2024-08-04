@@ -16,7 +16,7 @@ public class StrategyRule {
     /**
      * 抽奖策略ID
      */
-    private Integer strategyId;
+    private Long strategyId;
 
     /**
      * 抽奖奖品ID【规则类型为策略，则不需要奖品ID】
