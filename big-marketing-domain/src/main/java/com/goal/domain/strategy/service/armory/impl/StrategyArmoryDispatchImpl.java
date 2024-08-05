@@ -72,7 +72,7 @@ public class StrategyArmoryDispatchImpl implements IStrategyArmory, IStrategyDis
     public Integer getRandomAwardId(Long strategyId, String ruleWeightValue) {
         String key = strategyId + "_" + ruleWeightValue;
 
-        int rateRange = repository.getRateRange(strategyId);
+        int rateRange = repository.getRateRange(key);
         return repository.getStrategyAwardAssemble(key, new SecureRandom().nextInt(rateRange));
     }
 
