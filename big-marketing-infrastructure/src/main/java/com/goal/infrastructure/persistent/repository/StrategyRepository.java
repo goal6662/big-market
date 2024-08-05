@@ -13,6 +13,7 @@ import com.goal.infrastructure.persistent.po.StrategyRule;
 import com.goal.infrastructure.persistent.redis.IRedisService;
 import com.goal.types.common.Constants;
 import lombok.AllArgsConstructor;
+import org.apache.ibatis.annotations.Param;
 import org.redisson.api.RMap;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Repository;
@@ -123,6 +124,11 @@ public class StrategyRepository implements IStrategyRepository {
         BeanUtils.copyProperties(strategyRuleReq, strategyRuleEntity);
 
         return strategyRuleEntity;
+    }
+
+    @Override
+    public String queryStrategyRuleValue(Long strategyId, Integer awardId, String ruleModel) {
+        return strategyRuleDao.queryStrategyRuleValue(strategyId, awardId, ruleModel);
     }
 
 }

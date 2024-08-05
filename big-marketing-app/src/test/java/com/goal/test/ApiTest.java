@@ -1,5 +1,7 @@
 package com.goal.test;
 
+import com.goal.domain.strategy.model.entity.RaffleFactorEntity;
+import com.goal.domain.strategy.service.IRaffleStrategy;
 import com.goal.infrastructure.persistent.dao.IAwardDao;
 import com.goal.infrastructure.persistent.dao.IStrategyAwardDao;
 import com.goal.infrastructure.persistent.dao.IStrategyDao;
@@ -32,6 +34,9 @@ public class ApiTest {
     @Resource
     private IStrategyAwardDao strategyAwardDao;
 
+    @Resource
+    private IRaffleStrategy raffleStrategy;
+
     @Test
     public void test() {
 //        List<Award> ruleList = strategyRuleDao.queryAwards();
@@ -42,6 +47,18 @@ public class ApiTest {
         System.out.println(list);
 
         log.info("测试完成");
+    }
+
+    @Test
+    public void raffleTest() {
+
+        RaffleFactorEntity raffleFactor = RaffleFactorEntity.builder()
+                .userId("user001")
+                .strategyId(100002L)
+                .build();
+
+        raffleStrategy.performRaffle(raffleFactor);
+
     }
 
 }

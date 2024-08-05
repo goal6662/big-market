@@ -35,6 +35,7 @@ mybatis:
   # configuration属性不可以和 config-location同时使用
   configuration:
     map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath:/mybatis/mapper/*.xml
   # config-location:
 

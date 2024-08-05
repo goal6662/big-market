@@ -1,5 +1,8 @@
 package com.goal.types.common;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 public class Constants {
 
     public final static String SPLIT = ",";
@@ -19,4 +22,15 @@ public class Constants {
 
     }
 
+    @Getter
+    @AllArgsConstructor
+    public enum RuleModelEnum {
+        RULE_LOCK("rule_lock"),
+        RULE_LUCK_AWARD("rule_luck_award"),
+        RULE_BLACKLIST("rule_blacklist"),
+        RULE_WEIGHT("rule_weight"),
+        RULE_RANDOM("rule_random"),
+        ;
+        private final String model;
+    }
 }
