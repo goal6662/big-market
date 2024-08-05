@@ -57,7 +57,7 @@ public class ApiTest {
                 .strategyId(100002L)
                 .build();
 
-        raffleStrategy.performRaffle(raffleFactor);
+        System.out.println(raffleStrategy.performRaffle(raffleFactor));
 
     }
 

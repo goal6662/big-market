@@ -16,6 +16,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * 实现规则过滤的应用：
+ *  黑名单过滤比较特殊需要单独考虑
+ */
 @Slf4j
 @Service
 public class DefaultRaffleStrategy extends AbstractRaffleStrategy {
@@ -68,7 +72,11 @@ public class DefaultRaffleStrategy extends AbstractRaffleStrategy {
             ruleActionEntity = logicFilter.filter(ruleMatterEntity);
             // 非放行结果则顺序过滤
             log.info("抽奖前规则过滤 userId: {} ruleModel: {} code: {} info: {}", raffleFactorEntity.getUserId(), ruleModel, ruleActionEntity.getCode(), ruleActionEntity.getInfo());
-            if (!RuleLogicCheckTypeVO.ALLOW.getCode().equals(ruleActionEntity.getCode())) return ruleActionEntity;
+            if (!RuleLogicCheckTypeVO.ALLOW.getCode().equals(ruleActionEntity.getCode())) {
+                // 如果该规则接管了抽奖流程，返回该规则的过滤结果【包含结果后续流程的过滤规则模型】
+                // 模板类根据过滤规则决定后续如何进行抽奖
+                return ruleActionEntity;
+            }
         }
 
         return ruleActionEntity;

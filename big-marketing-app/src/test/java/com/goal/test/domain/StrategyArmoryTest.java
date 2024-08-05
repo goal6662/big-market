@@ -1,5 +1,7 @@
 package com.goal.test.domain;
 
+import com.goal.domain.strategy.model.entity.RaffleFactorEntity;
+import com.goal.domain.strategy.service.IRaffleStrategy;
 import com.goal.domain.strategy.service.armory.IStrategyArmory;
 import com.goal.domain.strategy.service.armory.IStrategyDispatch;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +20,9 @@ class StrategyArmoryTest {
     @Autowired
     private IStrategyDispatch strategyDispatch;
 
+    @Autowired
+    private IRaffleStrategy raffleStrategy;
+
     @BeforeEach
     public void testAssembleLotteryStrategy() {
         strategyArmory.assembleLotteryStrategy(100002L);
@@ -25,13 +30,13 @@ class StrategyArmoryTest {
 
     @Test
     public void testAwardIdGet() {
-        for (int i = 0; i < 10; i++) {
-            log.info("获取奖品：{}", strategyDispatch.getRandomAwardId(100002L));
-        }
 
-        for (int i = 0; i < 10; i++) {
-            log.info("获取奖品：{}", strategyDispatch.getRandomAwardId(100002L, "6000"));
-        }
+        RaffleFactorEntity raffleFactor = RaffleFactorEntity.builder()
+                .strategyId(100002L)
+                .userId("user110")
+                .build();
+
+        System.out.println(raffleStrategy.performRaffle(raffleFactor));
 
     }
 

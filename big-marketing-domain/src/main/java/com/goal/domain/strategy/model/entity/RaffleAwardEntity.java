@@ -5,6 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * 抽奖获取到的具体奖品
+ *  属性完全来自于Award类
+ */
 @Data
 @Builder
 @NoArgsConstructor

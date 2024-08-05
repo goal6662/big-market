@@ -16,6 +16,15 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Resource;
 
+/**
+ * 规则过滤抽奖的抽象模板
+ *  1. 校验参数
+ *  2. 查询策略所用规则
+ *  3. 根据规则进行过滤
+ *  4. 根据过滤结果，决定如何进行抽奖
+ *      黑名单：奖品信息已知  [105:user001,user002] 奖品id是：105
+ *      权重：根据key调用之前的方法
+ */
 @Slf4j
 public abstract class AbstractRaffleStrategy implements IRaffleStrategy {
 
@@ -54,6 +63,7 @@ public abstract class AbstractRaffleStrategy implements IRaffleStrategy {
                 // 权重根据返回的信息进行抽奖
                 RuleActionEntity.RaffleBeforeEntity raffleBeforeEntity = ruleActionEntity.getData();
                 String ruleWeightValueKey = raffleBeforeEntity.getRuleWeightValueKey();
+                // 进行权重抽奖
                 Integer awardId = strategyDispatch.getRandomAwardId(strategyId, ruleWeightValueKey);
                 return RaffleAwardEntity.builder()
                         .awardId(awardId)
@@ -63,6 +73,7 @@ public abstract class AbstractRaffleStrategy implements IRaffleStrategy {
         }
 
         // 5. 默认抽奖流程
+        // 进行默认抽奖
         Integer awardId = strategyDispatch.getRandomAwardId(strategyId);
 
         return RaffleAwardEntity.builder()

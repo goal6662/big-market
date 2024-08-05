@@ -49,20 +49,25 @@ public class RuleWeightLogicFilter implements ILogicFilter<RuleActionEntity.Raff
         for (int i = sortedWeightList.size() - 1; i >= 0; i--) {
             if (sortedWeightList.get(i) <= Long.parseLong(userWeight)) {
                 ruleWeightValueKey = String.valueOf(sortedWeightList.get(i));
+                // 找到了满足的最小权重
+                return RuleActionEntity.<RuleActionEntity.RaffleBeforeEntity>builder()
+                        .ruleModel(DefaultLogicFactory.LogicModel.RULE_WEIGHT.getCode())
+                        .data(
+                                RuleActionEntity.RaffleBeforeEntity.builder()
+                                        .strategyId(ruleMatter.getStrategyId())
+                                        .ruleWeightValueKey(ruleWeightValueKey)
+                                        .build()
+                        )
+                        .code(RuleLogicCheckTypeVO.TAKE_OVER.getCode())
+                        .info(RuleLogicCheckTypeVO.TAKE_OVER.getInfo())
+                        .build();
             }
         }
 
-
+        // 没有找到，不进行接管
         return RuleActionEntity.<RuleActionEntity.RaffleBeforeEntity>builder()
-                .ruleModel(DefaultLogicFactory.LogicModel.RULE_BLACKLIST.getCode())
-                .data(
-                        RuleActionEntity.RaffleBeforeEntity.builder()
-                                .strategyId(ruleMatter.getStrategyId())
-                                .ruleWeightValueKey(ruleWeightValueKey)
-                                .build()
-                )
-                .code(RuleLogicCheckTypeVO.TAKE_OVER.getCode())
-                .info(RuleLogicCheckTypeVO.TAKE_OVER.getInfo())
+                .code(RuleLogicCheckTypeVO.ALLOW.getCode())
+                .info(RuleLogicCheckTypeVO.ALLOW.getInfo())
                 .build();
     }
 }

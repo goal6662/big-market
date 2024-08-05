@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * 抽奖规则过滤因子
+ */
 @Data
 @Builder
 @NoArgsConstructor
