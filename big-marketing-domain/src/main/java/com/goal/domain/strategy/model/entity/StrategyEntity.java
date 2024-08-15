@@ -4,6 +4,10 @@ import com.goal.types.common.Constants;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * 策略实体
+ *  对应 strategy 表
+ */
 @Data
 public class StrategyEntity {
 
