@@ -3,6 +3,7 @@ package com.goal.infrastructure.persistent.repository;
 import com.goal.domain.strategy.model.entity.StrategyAwardEntity;
 import com.goal.domain.strategy.model.entity.StrategyEntity;
 import com.goal.domain.strategy.model.entity.StrategyRuleEntity;
+import com.goal.domain.strategy.model.vo.StrategyAwardRuleModelVO;
 import com.goal.domain.strategy.repository.IStrategyRepository;
 import com.goal.infrastructure.persistent.dao.IStrategyAwardDao;
 import com.goal.infrastructure.persistent.dao.IStrategyDao;
@@ -138,6 +139,16 @@ public class StrategyRepository implements IStrategyRepository {
     @Override
     public String queryStrategyRuleValue(Long strategyId, String ruleModel) {
         return strategyRuleDao.queryStrategyRuleValue(strategyId, null, ruleModel);
+    }
+
+    @Override
+    public StrategyAwardRuleModelVO queryStrategyAwardRuleModelVO(Long strategyId, Integer awardId) {
+        StrategyAward strategyAward = new StrategyAward();
+        strategyAward.setStrategyId(strategyId);
+        strategyAward.setAwardId(awardId);
+
+        String ruleModels = strategyAwardDao.queryStrategyAwardRuleModels(strategyAward);
+        return StrategyAwardRuleModelVO.builder().ruleModels(ruleModels).build();
     }
 
 }

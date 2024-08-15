@@ -35,5 +35,12 @@
         from strategy_award
         where strategy_id = #{strategyId}
     </select>
+    <select id="queryStrategyAwardRuleModels" resultType="java.lang.String">
+        select
+            strategy_award.rule_models
+        from big_market.strategy_award
+        where
+            strategy_id = #{strategyId} and award_id = #{awardId}
+    </select>
 
 </mapper>

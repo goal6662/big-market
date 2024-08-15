@@ -6,7 +6,6 @@ import com.goal.domain.strategy.service.rule.chain.ILogicChain;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.Map;
 
 /**
