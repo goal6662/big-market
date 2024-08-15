@@ -4,11 +4,14 @@ import com.goal.domain.strategy.model.entity.RaffleFactorEntity;
 import com.goal.domain.strategy.service.IRaffleStrategy;
 import com.goal.domain.strategy.service.armory.IStrategyArmory;
 import com.goal.domain.strategy.service.armory.IStrategyDispatch;
+import com.goal.domain.strategy.service.rule.chain.ILogicChain;
+import com.goal.domain.strategy.service.rule.chain.factory.DefaultChainFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.util.ReflectionTestUtils;
 
 @Slf4j
 @SpringBootTest
@@ -16,9 +19,6 @@ class StrategyArmoryTest {
 
     @Autowired
     private IStrategyArmory strategyArmory;
-
-    @Autowired
-    private IStrategyDispatch strategyDispatch;
 
     @Autowired
     private IRaffleStrategy raffleStrategy;

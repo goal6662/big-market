@@ -30,7 +30,7 @@ public class RuleWeightLogicChain extends AbstractLogicChain {
 
     @Override
     public Integer logic(String userId, Long strategyId) {
-        log.info("抽奖责任链-黑名单开始 userId: {} strategyId: {} ruleModel: {}", userId, strategyId, ruleModel());
+        log.info("抽奖责任链-权重开始 userId: {} strategyId: {} ruleModel: {}", userId, strategyId, ruleModel());
 
         StrategyRuleEntity strategyRuleEntity = repository.queryStrategyRule(strategyId, ruleModel());
         Map<String, List<Integer>> ruleWeightValues = strategyRuleEntity.getRuleWeightValues();
@@ -51,6 +51,8 @@ public class RuleWeightLogicChain extends AbstractLogicChain {
                 }
             }
         }
+
+        log.info("抽奖责任链-权重放行 userId: {} strategyId: {} ruleModel: {}", userId, strategyId, ruleModel());
 
         return next().logic(userId, strategyId);
     }
