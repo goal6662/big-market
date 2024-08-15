@@ -1,6 +1,6 @@
 package com.goal.domain.strategy.service.annotation;
 
-import com.goal.domain.strategy.service.factory.DefaultLogicFactory;
+import com.goal.domain.strategy.service.rule.filter.factory.DefaultLogicFactory;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.ElementType;

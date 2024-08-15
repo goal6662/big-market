@@ -4,14 +4,14 @@ import com.goal.domain.strategy.model.entity.RaffleFactorEntity;
 import com.goal.domain.strategy.model.entity.RuleActionEntity;
 import com.goal.domain.strategy.model.entity.RuleMatterEntity;
 import com.goal.domain.strategy.model.vo.RuleLogicCheckTypeVO;
-import com.goal.domain.strategy.service.factory.DefaultLogicFactory;
-import com.goal.domain.strategy.service.rule.ILogicFilter;
+import com.goal.domain.strategy.service.AbstractRaffleStrategy;
+import com.goal.domain.strategy.service.rule.filter.factory.DefaultLogicFactory;
+import com.goal.domain.strategy.service.rule.filter.ILogicFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;

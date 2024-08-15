@@ -1,4 +1,4 @@
-package com.goal.domain.strategy.service.raffle;
+package com.goal.domain.strategy.service;
 
 import com.goal.domain.strategy.model.entity.RaffleAwardEntity;
 import com.goal.domain.strategy.model.entity.RaffleFactorEntity;
@@ -6,9 +6,8 @@ import com.goal.domain.strategy.model.entity.RuleActionEntity;
 import com.goal.domain.strategy.model.entity.StrategyEntity;
 import com.goal.domain.strategy.model.vo.RuleLogicCheckTypeVO;
 import com.goal.domain.strategy.repository.IStrategyRepository;
-import com.goal.domain.strategy.service.IRaffleStrategy;
 import com.goal.domain.strategy.service.armory.IStrategyDispatch;
-import com.goal.domain.strategy.service.factory.DefaultLogicFactory;
+import com.goal.domain.strategy.service.rule.filter.factory.DefaultLogicFactory;
 import com.goal.types.enums.ResponseCode;
 import com.goal.types.exception.AppException;
 import lombok.extern.slf4j.Slf4j;

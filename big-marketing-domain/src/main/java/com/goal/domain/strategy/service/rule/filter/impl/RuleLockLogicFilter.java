@@ -1,12 +1,12 @@
-package com.goal.domain.strategy.service.rule.impl;
+package com.goal.domain.strategy.service.rule.filter.impl;
 
 import com.goal.domain.strategy.model.entity.RuleActionEntity;
 import com.goal.domain.strategy.model.entity.RuleMatterEntity;
 import com.goal.domain.strategy.model.vo.RuleLogicCheckTypeVO;
 import com.goal.domain.strategy.repository.IStrategyRepository;
 import com.goal.domain.strategy.service.annotation.LogicStrategy;
-import com.goal.domain.strategy.service.factory.DefaultLogicFactory;
-import com.goal.domain.strategy.service.rule.ILogicFilter;
+import com.goal.domain.strategy.service.rule.filter.factory.DefaultLogicFactory;
+import com.goal.domain.strategy.service.rule.filter.ILogicFilter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Resource;

@@ -1,4 +1,4 @@
-package com.goal.domain.strategy.service.rule;
+package com.goal.domain.strategy.service.rule.filter;
 
 import com.goal.domain.strategy.model.entity.RuleActionEntity;
 import com.goal.domain.strategy.model.entity.RuleMatterEntity;
