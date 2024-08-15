@@ -17,7 +17,6 @@ import java.util.concurrent.ConcurrentHashMap;
  *  限定过滤规则
  *  加载过滤规则
  */
-@Getter
 @Service
 public class DefaultLogicFactory {
 
@@ -38,15 +37,27 @@ public class DefaultLogicFactory {
         return (Map<String, ILogicFilter<T>>) (Map<?, ?>) logicFilterMap;
     }
 
+
     @Getter
     @AllArgsConstructor
     public enum LogicModel {
-        RULE_WEIGHT("rule_weight","【抽奖前规则】根据抽奖权重返回可抽奖范围KEY"),
-        RULE_BLACKLIST("rule_blacklist","【抽奖前规则】黑名单规则过滤，命中黑名单则直接返回"),
+        RULE_WEIGHT("rule_weight","【抽奖前规则】根据抽奖权重返回可抽奖范围KEY", "before"),
+        RULE_BLACKLIST("rule_blacklist","【抽奖前规则】黑名单规则过滤，命中黑名单则直接返回", "before"),
+        RULE_LOCK("rule_lock", "【抽奖中规则】抽中需要次数解锁的奖品后，执行接管", "center")
         ;
 
         private final String code;
         private final String info;
+        private final String type;
+
+        public static boolean isBefore(String ruleModel) {
+            return ruleModel.equals(RULE_BLACKLIST.getCode())
+                    || ruleModel.equals(RULE_WEIGHT.getCode());
+        }
+
+        public static boolean isCenter(String ruleModel) {
+            return ruleModel.equals(RULE_LOCK.getCode());
+        }
 
     }
 }

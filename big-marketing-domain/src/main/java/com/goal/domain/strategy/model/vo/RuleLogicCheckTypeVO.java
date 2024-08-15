@@ -17,4 +17,11 @@ public enum RuleLogicCheckTypeVO {
     private final String code;
     private final String info;
 
+    public static boolean isAllow(String code) {
+        return code.equalsIgnoreCase(ALLOW.code);
+    }
+
+    public static boolean isTakeOver(String code) {
+        return !isAllow(code);
+    }
 }

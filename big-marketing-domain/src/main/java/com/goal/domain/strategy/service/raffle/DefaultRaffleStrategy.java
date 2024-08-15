@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -80,5 +81,32 @@ public class DefaultRaffleStrategy extends AbstractRaffleStrategy {
         }
 
         return ruleActionEntity;
+    }
+
+    @Override
+    protected RuleActionEntity<RuleActionEntity.RaffleCenterEntity> doCheckRaffleCenterAction(RaffleFactorEntity raffleFactorEntity, String... logics) {
+
+        Map<String, ILogicFilter<RuleActionEntity.RaffleCenterEntity>> logicFilterMap = logicFactory.openLogicFilter();
+
+        RuleActionEntity<RuleActionEntity.RaffleCenterEntity> ruleAction = null;
+        for (String logicModel : logics) {
+            ILogicFilter<RuleActionEntity.RaffleCenterEntity> logicFilter = logicFilterMap.get(logicModel);
+
+            RuleMatterEntity ruleMatterEntity = new RuleMatterEntity();
+            ruleMatterEntity.setUserId(raffleFactorEntity.getUserId());
+            ruleMatterEntity.setAwardId(raffleFactorEntity.getAwardId());
+            ruleMatterEntity.setStrategyId(raffleFactorEntity.getStrategyId());
+            ruleMatterEntity.setRuleModel(logicModel);
+
+            ruleAction = logicFilter.filter(ruleMatterEntity);
+
+            // 非放行规则顺序过滤
+            if (!ruleAction.getCode().equals(RuleLogicCheckTypeVO.ALLOW.getCode())) {
+                // 不放行，进行接管
+                return ruleAction;
+            }
+        }
+
+        return ruleAction;
     }
 }

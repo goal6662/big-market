@@ -53,8 +53,8 @@ public class ApiTest {
     public void raffleTest() {
 
         RaffleFactorEntity raffleFactor = RaffleFactorEntity.builder()
-                .userId("user001")
-                .strategyId(100002L)
+                .userId("user009")
+                .strategyId(100001L)
                 .build();
 
         System.out.println(raffleStrategy.performRaffle(raffleFactor));

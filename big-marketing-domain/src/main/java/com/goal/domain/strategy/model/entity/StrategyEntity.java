@@ -36,6 +36,10 @@ public class StrategyEntity {
 
     public String getRuleWeight() {
         String[] models = this.getRuleModels();
+        if (models == null) {
+            return null;
+        }
+
         for (String model : models) {
             if ("rule_weight".equals(model)) {
                 return model;

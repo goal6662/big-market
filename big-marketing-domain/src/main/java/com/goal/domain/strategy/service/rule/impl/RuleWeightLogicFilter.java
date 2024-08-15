@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @LogicStrategy(logicModel = DefaultLogicFactory.LogicModel.RULE_WEIGHT)
 public class RuleWeightLogicFilter implements ILogicFilter<RuleActionEntity.RaffleBeforeEntity> {
 
-    private final String userWeight = "5000";
+    private final String userWeight = "1000";
 
     @Resource
     private IStrategyRepository repository;

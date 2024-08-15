@@ -25,14 +25,14 @@ class StrategyArmoryTest {
 
     @BeforeEach
     public void testAssembleLotteryStrategy() {
-        strategyArmory.assembleLotteryStrategy(100002L);
+        strategyArmory.assembleLotteryStrategy(100001L);
     }
 
     @Test
     public void testAwardIdGet() {
 
         RaffleFactorEntity raffleFactor = RaffleFactorEntity.builder()
-                .strategyId(100002L)
+                .strategyId(100001L)
                 .userId("user110")
                 .build();
 
