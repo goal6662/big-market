@@ -4,6 +4,8 @@ import com.goal.domain.strategy.service.armory.IStrategyDispatch;
 import com.goal.domain.strategy.service.rule.chain.AbstractLogicChain;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component("default")
 @RequiredArgsConstructor
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class DefaultLogicChain extends AbstractLogicChain {
 
     private final IStrategyDispatch dispatch;

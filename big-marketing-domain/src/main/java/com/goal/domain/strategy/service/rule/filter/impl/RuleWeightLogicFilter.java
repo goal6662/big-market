@@ -6,8 +6,8 @@ import com.goal.domain.strategy.model.entity.StrategyRuleEntity;
 import com.goal.domain.strategy.model.vo.RuleLogicCheckTypeVO;
 import com.goal.domain.strategy.repository.IStrategyRepository;
 import com.goal.domain.strategy.service.annotation.LogicStrategy;
-import com.goal.domain.strategy.service.rule.filter.factory.DefaultLogicFactory;
 import com.goal.domain.strategy.service.rule.filter.ILogicFilter;
+import com.goal.domain.strategy.service.rule.filter.factory.DefaultLogicFactory;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Resource;
@@ -45,7 +45,7 @@ public class RuleWeightLogicFilter implements ILogicFilter<RuleActionEntity.Raff
                 .sorted()
                 .collect(Collectors.toList());
 
-        String ruleWeightValueKey = null;
+        String ruleWeightValueKey;
         for (int i = sortedWeightList.size() - 1; i >= 0; i--) {
             if (sortedWeightList.get(i) <= Long.parseLong(userWeight)) {
                 ruleWeightValueKey = String.valueOf(sortedWeightList.get(i));

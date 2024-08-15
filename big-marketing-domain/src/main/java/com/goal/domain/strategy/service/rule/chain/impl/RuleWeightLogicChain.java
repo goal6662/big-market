@@ -6,6 +6,8 @@ import com.goal.domain.strategy.service.armory.IStrategyDispatch;
 import com.goal.domain.strategy.service.rule.chain.AbstractLogicChain;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,6 +17,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component("rule_weight")
 @RequiredArgsConstructor
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class RuleWeightLogicChain extends AbstractLogicChain {
 
     private final IStrategyRepository repository;

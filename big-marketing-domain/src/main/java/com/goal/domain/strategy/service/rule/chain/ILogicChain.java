@@ -3,7 +3,7 @@ package com.goal.domain.strategy.service.rule.chain;
 /**
  * 定义责任链的各个节点所要实现的方法
  */
-public interface ILogicChain extends ILogicChainArmory {
+public interface ILogicChain extends ILogicChainArmory, Cloneable {
 
     /**
      * 责任链接口
