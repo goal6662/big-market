@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
  * 默认策略，直接进行抽奖即可
  */
 @Slf4j
-@Component("default")
+@Component("rule_default")
 @RequiredArgsConstructor
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class DefaultLogicChain extends AbstractLogicChain {
@@ -35,6 +35,6 @@ public class DefaultLogicChain extends AbstractLogicChain {
 
     @Override
     protected String ruleModel() {
-        return "default";
+        return "rule_default";
     }
 }

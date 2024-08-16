@@ -43,7 +43,7 @@ public class DefaultChainFactory {
 
         // 如果未配置策略规则，则只装填一个默认责任链
         if (null == ruleModels || 0 == ruleModels.length) {
-            ILogicChain ruleDefaultLogicChain = applicationContext.getBean("default", ILogicChain.class);
+            ILogicChain ruleDefaultLogicChain = applicationContext.getBean("rule_default", ILogicChain.class);
 
             logicChainGroup.put(strategyId, ruleDefaultLogicChain);
             return ruleDefaultLogicChain;
@@ -58,7 +58,7 @@ public class DefaultChainFactory {
         }
 
         // 责任链的最后装填默认责任链
-        current.appendNext(applicationContext.getBean("default", ILogicChain.class));
+        current.appendNext(applicationContext.getBean("rule_default", ILogicChain.class));
         logicChainGroup.put(strategyId, logicChain);
 
         return logicChain;
