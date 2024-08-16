@@ -1,5 +1,6 @@
 package com.goal.infrastructure.persistent.repository;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.goal.domain.strategy.model.entity.StrategyAwardEntity;
 import com.goal.domain.strategy.model.entity.StrategyEntity;
 import com.goal.domain.strategy.model.entity.StrategyRuleEntity;
@@ -158,8 +159,8 @@ public class StrategyRepository implements IStrategyRepository {
     public RuleTreeVO queryRuleTreeVOByTreeId(String treeId) {
         // 优先从缓存获取
         String cacheKey = Constants.RedisKey.RULE_TREE_VO_KEY + treeId;
-        RuleTreeVO ruleTreeVOCache = redisService.getValue(cacheKey);
-        if (null != ruleTreeVOCache) return ruleTreeVOCache;
+        String ruleTreeVOCache = redisService.getValue(cacheKey);
+        if (null != ruleTreeVOCache) return JSONObject.parse(ruleTreeVOCache).toJavaObject(RuleTreeVO.class);
 
         // 从数据库获取
         RuleTree ruleTree = ruleTreeDao.queryRuleTreeByTreeId(treeId);
@@ -204,7 +205,7 @@ public class StrategyRepository implements IStrategyRepository {
                 .treeNodeMap(treeNodeMap)
                 .build();
 
-        redisService.setValue(cacheKey, ruleTreeVODB);
+        redisService.setValue(cacheKey, JSONObject.toJSONString(ruleTreeVODB));
         return ruleTreeVODB;
 
     }
