@@ -1,5 +1,7 @@
 package com.goal.domain.strategy.service.rule.chain;
 
+import com.goal.domain.strategy.service.rule.chain.factory.DefaultChainFactory;
+
 /**
  * 定义责任链的各个节点所要实现的方法
  */
@@ -12,6 +14,6 @@ public interface ILogicChain extends ILogicChainArmory, Cloneable {
      * @param strategyId 策略ID
      * @return 奖品ID
      */
-    Integer logic(String userId, Long strategyId);
+    DefaultChainFactory.StrategyAwardVO logic(String userId, Long strategyId);
 
 }

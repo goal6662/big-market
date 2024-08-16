@@ -2,6 +2,7 @@ package com.goal.domain.strategy.service.rule.chain.impl;
 
 import com.goal.domain.strategy.repository.IStrategyRepository;
 import com.goal.domain.strategy.service.rule.chain.AbstractLogicChain;
+import com.goal.domain.strategy.service.rule.chain.factory.DefaultChainFactory;
 import com.goal.types.common.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -24,7 +25,7 @@ public class BackListLogicChain extends AbstractLogicChain {
      *      获取 rule_value 的值，判断用户是否在其中
      */
     @Override
-    public Integer logic(String userId, Long strategyId) {
+    public DefaultChainFactory.StrategyAwardVO logic(String userId, Long strategyId) {
         log.info("抽奖责任链-黑名单开始 userId: {} strategyId: {} ruleModel: {}", userId, strategyId, ruleModel());
 
         // 查询 rule_value
@@ -37,7 +38,10 @@ public class BackListLogicChain extends AbstractLogicChain {
         for (String userBlackId : userBlackIdList) {
             if (userId.equals(userBlackId)) {
                 log.info("抽奖责任链-黑名单接管 userId: {} strategyId: {} ruleModel: {} awardId: {}", userId, strategyId, ruleModel(), awardId);
-                return awardId;
+                return DefaultChainFactory.StrategyAwardVO.builder()
+                        .awardId(awardId)
+                        .logicModel(ruleModel())
+                        .build();
             }
         }
 

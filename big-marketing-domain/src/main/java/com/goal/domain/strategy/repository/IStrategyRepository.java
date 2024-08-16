@@ -3,6 +3,7 @@ package com.goal.domain.strategy.repository;
 import com.goal.domain.strategy.model.entity.StrategyAwardEntity;
 import com.goal.domain.strategy.model.entity.StrategyEntity;
 import com.goal.domain.strategy.model.entity.StrategyRuleEntity;
+import com.goal.domain.strategy.model.vo.RuleTreeVO;
 import com.goal.domain.strategy.model.vo.StrategyAwardRuleModelVO;
 
 import java.util.List;
@@ -66,4 +67,11 @@ public interface IStrategyRepository {
     String queryStrategyRuleValue(Long strategyId, String ruleModel);
 
     StrategyAwardRuleModelVO queryStrategyAwardRuleModelVO(Long strategyId, Integer awardId);
+
+    /**
+     * 查询决策树的根节点
+     * @param treeId 规则模型
+     * @return 决策树
+     */
+    RuleTreeVO queryRuleTreeVOByTreeId(String treeId);
 }

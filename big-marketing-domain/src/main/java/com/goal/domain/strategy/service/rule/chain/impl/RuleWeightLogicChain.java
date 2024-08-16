@@ -4,6 +4,7 @@ import com.goal.domain.strategy.model.entity.StrategyRuleEntity;
 import com.goal.domain.strategy.repository.IStrategyRepository;
 import com.goal.domain.strategy.service.armory.IStrategyDispatch;
 import com.goal.domain.strategy.service.rule.chain.AbstractLogicChain;
+import com.goal.domain.strategy.service.rule.chain.factory.DefaultChainFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -32,7 +33,7 @@ public class RuleWeightLogicChain extends AbstractLogicChain {
     }
 
     @Override
-    public Integer logic(String userId, Long strategyId) {
+    public DefaultChainFactory.StrategyAwardVO logic(String userId, Long strategyId) {
         log.info("抽奖责任链-权重开始 userId: {} strategyId: {} ruleModel: {}", userId, strategyId, ruleModel());
 
         StrategyRuleEntity strategyRuleEntity = repository.queryStrategyRule(strategyId, ruleModel());
@@ -50,7 +51,11 @@ public class RuleWeightLogicChain extends AbstractLogicChain {
                 if (sortedWeightList.get(i) <= userScore) {
                     ruleWeightValueKey = String.valueOf(sortedWeightList.get(i));
                     // 找到了满足的最小权重
-                    return dispatch.getRandomAwardId(strategyId, ruleWeightValueKey);
+                    Integer awardId = dispatch.getRandomAwardId(strategyId, ruleWeightValueKey);
+                    return DefaultChainFactory.StrategyAwardVO.builder()
+                            .awardId(awardId)
+                            .logicModel(ruleModel())
+                            .build();
                 }
             }
         }

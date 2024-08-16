@@ -30,14 +30,14 @@ public class DefaultTreeFactory {
          */
         private RuleLogicCheckTypeVO ruleLogicCheckType;
 
-        private StrategyAwardData strategyAwardData;
+        private StrategyAwardVO strategyAwardData;
     }
 
     @Data
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class StrategyAwardData {
+    public static class StrategyAwardVO {
         private Integer awardId;
         private String awardRuleValue;
     }
