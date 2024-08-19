@@ -6,6 +6,7 @@ public interface ILogicTreeNode {
 
     DefaultTreeFactory.TreeActionEntity logic(String userId,
                                               Long strategyId,
-                                              Integer awardId);
+                                              Integer awardId,
+                                              String ruleValue);
 
 }

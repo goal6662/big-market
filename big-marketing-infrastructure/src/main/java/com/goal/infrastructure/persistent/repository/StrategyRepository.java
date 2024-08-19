@@ -11,6 +11,9 @@ import com.goal.infrastructure.persistent.po.*;
 import com.goal.infrastructure.persistent.redis.IRedisService;
 import com.goal.types.common.Constants;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RBlockingQueue;
+import org.redisson.api.RDelayedQueue;
 import org.redisson.api.RMap;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Repository;
@@ -19,7 +22,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class StrategyRepository implements IStrategyRepository {
@@ -208,6 +213,44 @@ public class StrategyRepository implements IStrategyRepository {
         redisService.setValue(cacheKey, JSONObject.toJSONString(ruleTreeVODB));
         return ruleTreeVODB;
 
+    }
+
+    @Override
+    public void cacheStrategyAwardCount(String cacheKey, Integer awardCount) {
+        Long cacheAwardCount = redisService.getAtomicLong(cacheKey);
+        if (cacheAwardCount == null) {
+            redisService.setValue(cacheKey, awardCount);
+        }
+    }
+
+    @Override
+    public Boolean subAwardStock(String cacheKey) {
+        long surplus = redisService.decr(cacheKey);
+        if (surplus < 0) {
+            // 没有库存了
+            redisService.setValue(cacheKey, 0);
+            return false;
+        }
+
+        // 对剩余库存加锁
+        String lockKey = cacheKey + Constants.UNDERLINE + surplus;
+        Boolean lock = redisService.setNx(lockKey);
+        if (!lock) {
+            log.error("扣减商品库存加锁失败：{}", lockKey);
+        }
+
+        return lock;
+    }
+
+    @Override
+    public void awardStockConsumeSendQueue(StrategyAwardStockKeyVO strategyAwardStockKeyVO) {
+        String cacheKey = Constants.RedisKey.STRATEGY_AWARD_COUNT_QUERY_KEY;
+
+        RBlockingQueue<StrategyAwardStockKeyVO> blockingQueue = redisService.getBlockingQueue(cacheKey);
+        RDelayedQueue<StrategyAwardStockKeyVO> delayedQueue = redisService.getDelayedQueue(blockingQueue);
+
+        // 3s 后加入
+        delayedQueue.offer(strategyAwardStockKeyVO, 3, TimeUnit.SECONDS);
     }
 
 }

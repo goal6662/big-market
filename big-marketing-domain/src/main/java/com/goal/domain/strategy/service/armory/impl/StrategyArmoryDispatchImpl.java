@@ -6,6 +6,7 @@ import com.goal.domain.strategy.model.entity.StrategyRuleEntity;
 import com.goal.domain.strategy.repository.IStrategyRepository;
 import com.goal.domain.strategy.service.armory.IStrategyArmory;
 import com.goal.domain.strategy.service.armory.IStrategyDispatch;
+import com.goal.types.common.Constants;
 import com.goal.types.enums.ResponseCode;
 import com.goal.types.exception.AppException;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,13 @@ public class StrategyArmoryDispatchImpl implements IStrategyArmory, IStrategyDis
     public boolean assembleLotteryStrategy(Long strategyId) {
         // 查询策略配置
         List<StrategyAwardEntity> strategyAwardEntityList = repository.queryStrategyAwardList(strategyId);
+
+        // 缓存奖品库存
+        for (StrategyAwardEntity strategyAward : strategyAwardEntityList) {
+            Integer awardId = strategyAward.getAwardId();
+            Integer awardCount = strategyAward.getAwardCount();
+            cacheStrategyAwardCount(strategyId, awardId, awardCount);
+        }
         assembleLotteryStrategy(String.valueOf(strategyId), strategyAwardEntityList);
 
         // 权重策略配置 主要是【rule_weight】
@@ -60,6 +68,14 @@ public class StrategyArmoryDispatchImpl implements IStrategyArmory, IStrategyDis
         return true;
     }
 
+    /**
+     * 缓存奖品的库存信息
+     */
+    private void cacheStrategyAwardCount(Long strategyId, Integer awardId, Integer awardCount) {
+        String cacheKey = Constants.RedisKey.STRATEGY_AWARD_COUNT_KEY + strategyId + Constants.UNDERLINE + awardId;
+        repository.cacheStrategyAwardCount(cacheKey, awardCount);
+    }
+
 
     @Override
     public Integer getRandomAwardId(Long strategyId) {
@@ -74,6 +90,12 @@ public class StrategyArmoryDispatchImpl implements IStrategyArmory, IStrategyDis
 
         int rateRange = repository.getRateRange(key);
         return repository.getStrategyAwardAssemble(key, new SecureRandom().nextInt(rateRange));
+    }
+
+    @Override
+    public Boolean subAwardStock(Long strategyId, Integer awardId) {
+        String cacheKey = Constants.RedisKey.STRATEGY_AWARD_COUNT_KEY + strategyId + Constants.UNDERLINE + awardId;
+        return repository.subAwardStock(cacheKey);
     }
 
 

@@ -5,6 +5,7 @@ import com.goal.domain.strategy.model.entity.StrategyEntity;
 import com.goal.domain.strategy.model.entity.StrategyRuleEntity;
 import com.goal.domain.strategy.model.vo.RuleTreeVO;
 import com.goal.domain.strategy.model.vo.StrategyAwardRuleModelVO;
+import com.goal.domain.strategy.model.vo.StrategyAwardStockKeyVO;
 
 import java.util.List;
 import java.util.Map;
@@ -74,4 +75,23 @@ public interface IStrategyRepository {
      * @return 决策树
      */
     RuleTreeVO queryRuleTreeVOByTreeId(String treeId);
+
+    /**
+     * 缓存奖品库存信息
+     * @param cacheKey 缓存 key
+     * @param awardCount 奖品库存
+     */
+    void cacheStrategyAwardCount(String cacheKey, Integer awardCount);
+
+    /**
+     * 扣减商品库存
+     * @param cacheKey 缓存 key
+     * @return 扣减是否成功
+     */
+    Boolean subAwardStock(String cacheKey);
+
+    /**
+     * 发送扣减库存的消息队列
+     */
+    void awardStockConsumeSendQueue(StrategyAwardStockKeyVO strategyAwardStockKeyVO);
 }

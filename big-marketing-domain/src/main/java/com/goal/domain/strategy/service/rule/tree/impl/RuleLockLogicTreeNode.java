@@ -1,7 +1,6 @@
 package com.goal.domain.strategy.service.rule.tree.impl;
 
 import com.goal.domain.strategy.model.vo.RuleLogicCheckTypeVO;
-import com.goal.domain.strategy.repository.IStrategyRepository;
 import com.goal.domain.strategy.service.rule.tree.ILogicTreeNode;
 import com.goal.domain.strategy.service.rule.tree.factory.DefaultTreeFactory;
 import lombok.RequiredArgsConstructor;
@@ -13,18 +12,20 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class RuleLockLogicTreeNode implements ILogicTreeNode {
 
-    public Integer userCount = 9;
-
-    private final IStrategyRepository repository;
+    public Long userCount = 9L;
 
     /**
      * 放行？
      */
     @Override
-    public DefaultTreeFactory.TreeActionEntity logic(String userId, Long strategyId, Integer awardId) {
+    public DefaultTreeFactory.TreeActionEntity logic(String userId, Long strategyId, Integer awardId, String ruleValue) {
 
-        String ruleValue = repository.queryStrategyRuleValue(strategyId, awardId, ruleModel());
-        int requiredCount = Integer.parseInt(ruleValue);
+        long requiredCount;
+        try {
+            requiredCount = Integer.parseInt(ruleValue);
+        } catch (Exception e) {
+            throw new RuntimeException("规则过滤-次数锁异常 ruleValue: " + ruleValue);
+        }
 
         if (userCount >= requiredCount) {
             // 满足最低抽奖次数
@@ -49,10 +50,6 @@ public class RuleLockLogicTreeNode implements ILogicTreeNode {
                 .ruleLogicCheckType(RuleLogicCheckTypeVO.TAKE_OVER)
                 .build();
 
-    }
-
-    private String ruleModel() {
-        return "rule_lock";
     }
 
 }
