@@ -217,8 +217,7 @@ public class StrategyRepository implements IStrategyRepository {
 
     @Override
     public void cacheStrategyAwardCount(String cacheKey, Integer awardCount) {
-        Long cacheAwardCount = redisService.getAtomicLong(cacheKey);
-        if (cacheAwardCount == null) {
+        if (redisService.getAtomicLong(cacheKey) == null) {
             redisService.setValue(cacheKey, awardCount);
         }
     }
@@ -251,6 +250,19 @@ public class StrategyRepository implements IStrategyRepository {
 
         // 3s 后加入
         delayedQueue.offer(strategyAwardStockKeyVO, 3, TimeUnit.SECONDS);
+    }
+
+    @Override
+    public StrategyAwardStockKeyVO takeQueueValue() {
+        String cacheKey = Constants.RedisKey.STRATEGY_AWARD_COUNT_QUERY_KEY;
+        RBlockingQueue<StrategyAwardStockKeyVO> destinationQueue = redisService.getBlockingQueue(cacheKey);
+
+        return destinationQueue.poll();
+    }
+
+    @Override
+    public void updateStrategyAwardStock(Long strategyId, Integer awardId) {
+        strategyAwardDao.updateStrategyAwardStock(strategyId, awardId);
     }
 
 }

@@ -94,4 +94,8 @@ public interface IStrategyRepository {
      * 发送扣减库存的消息队列
      */
     void awardStockConsumeSendQueue(StrategyAwardStockKeyVO strategyAwardStockKeyVO);
+
+    StrategyAwardStockKeyVO takeQueueValue();
+
+    void updateStrategyAwardStock(Long strategyId, Integer awardId);
 }

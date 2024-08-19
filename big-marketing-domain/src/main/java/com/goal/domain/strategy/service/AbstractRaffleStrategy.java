@@ -19,7 +19,7 @@ import org.apache.commons.lang3.StringUtils;
  * 权重：根据key调用之前的方法<br/>
  */
 @Slf4j
-public abstract class AbstractRaffleStrategy implements IRaffleStrategy {
+public abstract class AbstractRaffleStrategy implements IRaffleStrategy, IRaffleStock {
 
     @Override
     public RaffleAwardEntity performRaffle(RaffleFactorEntity raffleFactor) {
