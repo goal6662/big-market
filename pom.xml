@@ -13,6 +13,7 @@
         <module>big-marketing-trigger</module>
         <module>big-marketing-infrastructure</module>
         <module>big-marketing-types</module>
+        <module>big-marketing-api</module>
     </modules>
 
     <repositories>

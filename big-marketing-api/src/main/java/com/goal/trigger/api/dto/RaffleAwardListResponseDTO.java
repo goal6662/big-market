@@ -1,11 +1,17 @@
-package com.goal.domain.strategy.model.entity;
+package com.goal.trigger.api.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 @Data
-public class StrategyAwardEntity {
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class RaffleAwardListResponseDTO {
 
     /**
      * 抽奖策略ID

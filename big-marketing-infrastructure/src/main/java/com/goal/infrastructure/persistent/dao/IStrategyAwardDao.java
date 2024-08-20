@@ -10,9 +10,11 @@ import java.util.List;
 public interface IStrategyAwardDao {
     List<StrategyAward> queryAll();
 
-    List<StrategyAward> queryByStrategyId(Long strategyId);
+    List<StrategyAward> queryByStrategyId(@Param("strategyId") Long strategyId);
 
     String queryStrategyAwardRuleModels(StrategyAward strategyAward);
 
     void updateStrategyAwardStock(@Param("strategyId") Long strategyId, @Param("awardId") Integer awardId);
+
+    StrategyAward queryStrategyAward(@Param("strategyId") Long strategyId, @Param("awardId") Integer awardId);
 }

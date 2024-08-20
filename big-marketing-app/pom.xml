@@ -92,6 +92,11 @@
             <groupId>com.goal</groupId>
             <artifactId>big-marketing-infrastructure</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.goal</groupId>
+            <artifactId>big-marketing-api</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -1,10 +1,14 @@
 package com.goal.domain.strategy.service.raffle;
 
+import com.goal.domain.strategy.model.entity.StrategyAwardEntity;
 import com.goal.domain.strategy.model.vo.RuleTreeVO;
 import com.goal.domain.strategy.model.vo.StrategyAwardRuleModelVO;
 import com.goal.domain.strategy.model.vo.StrategyAwardStockKeyVO;
 import com.goal.domain.strategy.repository.IStrategyRepository;
 import com.goal.domain.strategy.service.AbstractRaffleStrategy;
+import com.goal.domain.strategy.service.IRaffleAward;
+import com.goal.domain.strategy.service.IRaffleStock;
+import com.goal.domain.strategy.service.IRaffleStrategy;
 import com.goal.domain.strategy.service.rule.chain.ILogicChain;
 import com.goal.domain.strategy.service.rule.chain.factory.DefaultChainFactory;
 import com.goal.domain.strategy.service.rule.tree.factory.DefaultTreeFactory;
@@ -13,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * 实现规则过滤的应用：
@@ -20,7 +26,7 @@ import javax.annotation.Resource;
  */
 @Slf4j
 @Service
-public class DefaultRaffleStrategy extends AbstractRaffleStrategy {
+public class DefaultRaffleStrategy extends AbstractRaffleStrategy implements IRaffleAward, IRaffleStock {
 
     @Resource
     private IStrategyRepository repository;
@@ -65,5 +71,10 @@ public class DefaultRaffleStrategy extends AbstractRaffleStrategy {
     @Override
     public void updateStrategyAwardStock(Long strategyId, Integer awardId) {
         repository.updateStrategyAwardStock(strategyId, awardId);
+    }
+
+    @Override
+    public List<StrategyAwardEntity> queryRaffleStrategyAwardList(Long strategyId) {
+        return repository.queryStrategyAwardList(strategyId);
     }
 }
