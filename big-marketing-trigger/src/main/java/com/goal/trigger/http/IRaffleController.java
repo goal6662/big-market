@@ -11,6 +11,7 @@ import com.goal.trigger.api.dto.RaffleAwardListRequestDTO;
 import com.goal.trigger.api.dto.RaffleAwardListResponseDTO;
 import com.goal.trigger.api.dto.RaffleRequestDTO;
 import com.goal.trigger.api.dto.RaffleResponseDTO;
+import com.goal.types.enums.ResponseCode;
 import com.goal.types.model.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
  * 抽奖服务
  */
 @Slf4j
-@CrossOrigin(value = "${app.config.cross-origin}")
+@CrossOrigin(origins = "*") //表示只允许这一个url可以跨域访问这个controller
 @RestController
 @RequestMapping("/api/${app.config.api-version}/raffle")
 public class IRaffleController implements IRaffleService {
@@ -41,6 +42,10 @@ public class IRaffleController implements IRaffleService {
     @Override
     @GetMapping("strategy_armory")
     public Response<Boolean> strategyArmory(Long strategyId) {
+
+        if (strategyId == null) {
+            return Response.fail(ResponseCode.ILLEGAL_PARAMETER);
+        }
 
         try {
 
