@@ -50,7 +50,7 @@ public class IRaffleController implements IRaffleService {
 
             return Response.success(armoryStatus);
         } catch (Exception e) {
-            log.info("抽奖策略装配失败 strategyId: {}", strategyId);
+            log.info("抽奖策略装配失败 strategyId: {}", strategyId, e);
             return Response.fail();
         }
 
@@ -76,7 +76,7 @@ public class IRaffleController implements IRaffleService {
             return Response.success(responseDTOList);
 
         } catch (Exception e) {
-            log.info("查询奖品列表失败 strategyId: {}", reqDTO.getStrategyId());
+            log.info("查询奖品列表失败 strategyId: {}", reqDTO.getStrategyId(), e);
             return Response.fail();
         }
 
@@ -99,7 +99,7 @@ public class IRaffleController implements IRaffleService {
                     .build());
 
         } catch (Exception e) {
-            log.info("随机抽奖失败 strategyId: {}", reqDTO.getStrategyId());
+            log.error("随机抽奖失败 strategyId: {}", reqDTO.getStrategyId(), e);
             return Response.fail();
         }
         

@@ -14,6 +14,7 @@ import com.goal.types.enums.ResponseCode;
 import com.goal.types.exception.AppException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.redisson.api.RBlockingQueue;
 import org.redisson.api.RDelayedQueue;
 import org.redisson.api.RMap;
@@ -124,6 +125,7 @@ public class StrategyRepository implements IStrategyRepository {
 
         strategyEntity = new StrategyEntity();
         BeanUtils.copyProperties(strategy, strategyEntity);
+        redisService.setValue(cacheKey, strategyEntity);
 
         return strategyEntity;
     }
@@ -132,7 +134,7 @@ public class StrategyRepository implements IStrategyRepository {
     public StrategyRuleEntity queryStrategyRule(Long strategyId, String ruleModel) {
 
         // 优先从缓存中获取
-        String cacheKey = Constants.RedisKey.STRATEGY_KEY + strategyId;
+        String cacheKey = Constants.RedisKey.STRATEGY_RULE_KEY + strategyId;
         StrategyRuleEntity strategyRuleEntity = redisService.getValue(cacheKey);
         if (strategyRuleEntity != null) {
             return strategyRuleEntity;
@@ -148,6 +150,8 @@ public class StrategyRepository implements IStrategyRepository {
         // 拷贝属性
         strategyRuleEntity = new StrategyRuleEntity();
         BeanUtils.copyProperties(strategyRuleReq, strategyRuleEntity);
+
+        redisService.setValue(cacheKey, strategyRuleEntity);
 
         return strategyRuleEntity;
     }
@@ -176,8 +180,8 @@ public class StrategyRepository implements IStrategyRepository {
     public RuleTreeVO queryRuleTreeVOByTreeId(String treeId) {
         // 优先从缓存获取
         String cacheKey = Constants.RedisKey.RULE_TREE_VO_KEY + treeId;
-        String ruleTreeVOCache = redisService.getValue(cacheKey);
-        if (null != ruleTreeVOCache) return JSONObject.parse(ruleTreeVOCache).toJavaObject(RuleTreeVO.class);
+        RuleTreeVO ruleTreeVOCache = redisService.getValue(cacheKey);
+        if (null != ruleTreeVOCache) return ruleTreeVOCache;
 
         // 从数据库获取
         RuleTree ruleTree = ruleTreeDao.queryRuleTreeByTreeId(treeId);
@@ -222,16 +226,18 @@ public class StrategyRepository implements IStrategyRepository {
                 .treeNodeMap(treeNodeMap)
                 .build();
 
-        redisService.setValue(cacheKey, JSONObject.toJSONString(ruleTreeVODB));
+        redisService.setValue(cacheKey, ruleTreeVODB);
         return ruleTreeVODB;
 
     }
 
     @Override
     public void cacheStrategyAwardCount(String cacheKey, Integer awardCount) {
-        if (redisService.getAtomicLong(cacheKey) == null) {
-            redisService.setValue(cacheKey, awardCount);
+        if (redisService.isExists(cacheKey)) {
+            return;
         }
+
+        redisService.setAtomicLong(cacheKey, awardCount);
     }
 
     @Override
@@ -239,7 +245,7 @@ public class StrategyRepository implements IStrategyRepository {
         long surplus = redisService.decr(cacheKey);
         if (surplus < 0) {
             // 没有库存了
-            redisService.setValue(cacheKey, 0);
+            redisService.setAtomicLong(cacheKey, 0);
             return false;
         }
 

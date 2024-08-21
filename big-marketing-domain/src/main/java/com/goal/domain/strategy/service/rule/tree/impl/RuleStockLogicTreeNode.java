@@ -45,7 +45,7 @@ public class RuleStockLogicTreeNode implements ILogicTreeNode {
         }
 
         return DefaultTreeFactory.TreeActionEntity.builder()
-                .ruleLogicCheckType(RuleLogicCheckTypeVO.TAKE_OVER)
+                .ruleLogicCheckType(RuleLogicCheckTypeVO.ALLOW)
                 .build();
 
     }
